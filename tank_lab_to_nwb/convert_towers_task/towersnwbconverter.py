@@ -74,16 +74,4 @@ class TowersNWBConverter(NWBConverter):
             TowersPosition=dict()
         )
 
-        if os.path.isfile(session_path + ".mat"):
-            session_data = convert_mat_file_to_dict(mat_file_name=session_path)
-            subject_data = session_data['log']['animal']
-
-            key_map = dict(name='subject_id', importWeight='weight')
-            [metadata['Subject'].update({key_map[k]: str(subject_data[k])}) for k in key_map if k in subject_data]
-
-            age_in_iso_format = duration_isoformat(timedelta(weeks=subject_data['importAge']))
-            metadata['Subject'].update(age=age_in_iso_format)
-        else:
-            print(f"Warning: no subject file detected for session {session_path}!")
-
         return metadata
