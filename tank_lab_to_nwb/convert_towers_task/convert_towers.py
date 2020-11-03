@@ -31,7 +31,7 @@ def run_tower_conv(virmen_session, spikeglx_session, nwbfile_path):
         if not os.path.isfile(nwbfile_path):
             input_args = dict(
                 SpikeGLXRecording=dict(file_path=spikeglx_session+".imec0.ap.bin"),
-                TowersPosition=dict(folder_path=virmen_session)
+                VirmenData=dict(folder_path=session)
             )
 
             converter = TowersNWBConverter(**input_args)
