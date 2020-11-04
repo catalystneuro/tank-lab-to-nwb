@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 
 from dateutil.parser import parse as dateparse
 from isodate import duration_isoformat
-from nwb_conversion_tools import NWBConverter, SpikeGLXRecordingInterface
+from nwb_conversion_tools import NWBConverter, SpikeGLXRecordingInterface, SIPickleRecordingExtractorInterface
 
 from .towersbehaviordatainterface import VirmenDataInterface
 from ..utils import convert_mat_file_to_dict
@@ -12,12 +12,14 @@ from ..utils import convert_mat_file_to_dict
 
 class TowersNWBConverter(NWBConverter):
     data_interface_classes = dict(
-        SpikeGLXRecording=SpikeGLXRecordingInterface,
+        # SpikeGLXRecording=SpikeGLXRecordingInterface,
         VirmenData=VirmenDataInterface,
+        SIPickleRecording=SIPickleRecordingExtractorInterface
     )
 
     def __init__(self, **input_args):
-        self._recording_type = 'SpikeGLXRecording'
+        # self._recording_type = 'SpikeGLXRecording'
+        self._recording_type = 'SIPickleRecording'
         super().__init__(**input_args)
 
     def get_recording_type(self):
@@ -70,7 +72,8 @@ class TowersNWBConverter(NWBConverter):
             #         }
             #     }
             # },
-            SpikeGLXRecording=None,
+            # SpikeGLXRecording=None,
+            SIPickleRecording=None,
             VirmenData=dict()
         )
 
