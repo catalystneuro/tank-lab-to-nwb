@@ -3,16 +3,13 @@ from pathlib import Path
 from isodate import duration_isoformat
 from datetime import timedelta
 
-import nwb_conversion_tools as ct
-import spikeextractors as se
-
 from tank_lab_to_nwb import TowersProcessedNWBConverter
 
 # Point to the base folder path for both recording data and Virmen
 base_path = Path("D:/Neuropixels/")
 
 # Name the NWBFile and point to the desired save path
-nwbfile_path = base_path / "TankProcessing_stub.nwb"
+nwbfile_path = base_path / "TowersProcessing_stub.nwb"
 
 # Point to the various files for the conversion
 recording_folder = base_path / "Neuropixels" / "A256_bank1_2020_09_30" / "A256_bank1_2020_09_30_g0"
@@ -53,16 +50,6 @@ converter = TowersProcessedNWBConverter(source_data)
 metadata = converter.get_metadata()
 metadata['NWBFile'].update(session_description=session_description)
 metadata['Subject'].update(subject_info)
-
-# TODO: Move to ProcessedNWBConverter, instantiate 'dummy' SpikeGLXRecordingInterface to use its get_metadata
-metadata.update(
-    ct.SpikeGLXRecordingInterface.get_ecephys_metadata(
-        spikeglx_meta=se.extractors.spikeglxrecordingextractor.readSGLX.readMeta(raw_data_file),
-        channel_ids=converter.data_interface_objects['SIRecording'].recording_extractor.get_channel_ids()
-    )
-)
-#####
-
 converter.run_conversion(
     nwbfile_path=str(nwbfile_path.absolute()),
     metadata=metadata,
