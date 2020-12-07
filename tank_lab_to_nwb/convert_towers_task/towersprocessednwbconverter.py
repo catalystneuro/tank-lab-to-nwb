@@ -2,7 +2,8 @@
 from pathlib import Path
 
 from dateutil.parser import parse as dateparse
-from nwb_conversion_tools import NWBConverter, SIPickleRecordingExtractorInterface, SIPickleSortingExtractorInterface
+from nwb_conversion_tools import NWBConverter, SIPickleRecordingExtractorInterface, SIPickleSortingExtractorInterface, \
+    SpikeGLXRecordingInterface
 
 from .virmenbehaviordatainterface import VirmenDataInterface
 from ..utils import convert_mat_file_to_dict
@@ -44,3 +45,7 @@ class TowersProcessedNWBConverter(NWBConverter):
             print(f"Warning: no subject file detected for session {session_id}!")
 
         return metadata
+
+    def get_spikeglx_metadata(self, spikeglx_filepath):
+        temp_spikeglx_interface = SpikeGLXRecordingInterface(**dict(file_path=spikeglx_filepath))
+        return temp_spikeglx_interface.get_metadata()
