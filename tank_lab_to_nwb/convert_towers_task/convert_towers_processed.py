@@ -13,7 +13,7 @@ nwbfile_path = base_path / "TowersProcessing_stub.nwb"
 
 # Point to the various files for the conversion
 recording_folder = base_path / "Neuropixels" / "A256_bank1_2020_09_30" / "A256_bank1_2020_09_30_g0"
-raw_data_file = recording_folder / "A256_bank1_2020_09_30_g0_t0.imec0.ap.bin"
+raw_data_file_path = recording_folder / "A256_bank1_2020_09_30_g0_t0.imec0.ap.bin"
 spikeinterface_folder = recording_folder / "spikeinterface"
 recording_pickle_file = spikeinterface_folder / "raw.pkl"
 sorting_pickle_file = spikeinterface_folder / "sorter1.pkl"
@@ -40,21 +40,21 @@ stub_test = True
 
 # Run the conversion
 source_data = dict(
-    SIRecording=dict(pkl_file=str(recording_pickle_file.absolute())),
-    SISorting=dict(pkl_file=str(sorting_pickle_file.absolute())),
-    VirmenData=dict(file_path=str(virmen_file_path.absolute()))
+    SIRecording=dict(pkl_file=str(recording_pickle_file)),
+    SISorting=dict(pkl_file=str(sorting_pickle_file)),
+    VirmenData=dict(file_path=str(virmen_file_path))
 )
 conversion_options = dict(
     SIRecording=dict(stub_test=stub_test),
     SISorting=dict(stub_test=stub_test)
 )
 converter = TowersProcessedNWBConverter(source_data)
-metadata = converter.get_metadata()
+metadata = converter.get_metadata(raw_data_file_path=raw_data_file_path)
 metadata['NWBFile'].update(session_description=session_description)
 metadata['Subject'].update(subject_info)
-metadata.update(converter.get_spikeglx_metadata(raw_data_file))
 converter.run_conversion(
-    nwbfile_path=str(nwbfile_path.absolute()),
+    nwbfile_path=str(nwbfile_path),
     metadata=metadata,
-    conversion_options=conversion_options
+    conversion_options=conversion_options,
+    overwrite=True
 )

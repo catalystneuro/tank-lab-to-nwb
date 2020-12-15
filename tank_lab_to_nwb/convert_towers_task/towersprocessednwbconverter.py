@@ -18,7 +18,7 @@ class TowersProcessedNWBConverter(NWBConverter):
         VirmenData=VirmenDataInterface,
     )
 
-    def get_metadata(self):
+    def get_metadata(self, raw_data_file_path: str):
         """Auto-populate as much metadata as possible."""
         vermin_file_path = Path(self.data_interface_objects['VirmenData'].source_data['file_path'])
         session_id = vermin_file_path.stem
@@ -44,8 +44,7 @@ class TowersProcessedNWBConverter(NWBConverter):
         else:
             print(f"Warning: no subject file detected for session {session_id}!")
 
-        return metadata
+        temp_spikeglx_interface = SpikeGLXRecordingInterface(file_path=raw_data_file_path)
+        metadata.update(temp_spikeglx_interface.get_metadata())
 
-    def get_spikeglx_metadata(self, spikeglx_filepath):
-        temp_spikeglx_interface = SpikeGLXRecordingInterface(**dict(file_path=spikeglx_filepath))
-        return temp_spikeglx_interface.get_metadata()
+        return metadata
